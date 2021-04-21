@@ -45,8 +45,8 @@ function conf_xml(){
 	sed -i "s#<source file=.*/>#<source file='${images_dir}${vir_name}.qcow2'/>#" /tmp/${vir_name}.xml
 	sed -i "s/<mac address=.*\/>/<mac address='$vir_mac' \/>/" /tmp/${vir_name}.xml
 	virsh define /tmp/${vir_name}.xml >/dev/null
-	virt-edit -d ${vir_name}  /etc/sysconfig/network-scripts/ifcfg-enp1s0  -e "s#BOOTPROTO=".*"#BOOTPROTO=static#"  # 替换ip
-    virt-edit -d ${vir_name}  /etc/sysconfig/network-scripts/ifcfg-enp1s0  -e "s#PROXY_METHOD=".*"#IPADDR="${vir_ip}"#"  # 替换ip
+	#virt-edit -d ${vir_name}  /etc/sysconfig/network-scripts/ifcfg-enp1s0  -e "s#BOOTPROTO=".*"#BOOTPROTO=static#"  # 替换ip
+    #virt-edit -d ${vir_name}  /etc/sysconfig/network-scripts/ifcfg-enp1s0  -e "s#PROXY_METHOD=".*"#IPADDR="${vir_ip}"#"  # 替换ip
 }
 
 #启动并设置开机自启
@@ -63,17 +63,17 @@ function create_vir_log(){
 
 main(){
     images_dir="/home/jessi/kvm/data/" # 镜像存储的位置
-    base_img="centos-base.qcow2"  # 基础镜像的名称
+    base_img="centos8-base.qcow2"  # 基础镜像的名称
     xmls_dir="/etc/libvirt/qemu/"  # xml 的位置
-    base_xml="centos-base.xml.bak"   # 基础xml的名称 
+    base_xml="centos8-base.xml.bak"   # 基础xml的名称 
     vir_log_file="/tmp/kvm_create_log.txt" # 创建日志文件
     vir_disk=40 # 磁盘默认为50G  
     vir_cpu=3 # cpu默认为2核
     vir_mem=6291456 # 内存默认为8G
-    vir_ip=192.168.122.1
+    vir_ip=192.168.122.??
     echo -e "服务器配置选项:\n 1: 3核6G 40G(测试) \n 2: 1核8G 50G(开发) \n 3: 2核8G 100G(数据库) \n 4: 4核20G 200G" 
     read  -t 30 -p  "输入你选择的配置的编号(1-4):" number
-    read  -t 90 -p "输入想要创建的IP(192.168.1.1):"  vir_ip
+    #read  -t 90 -p "输入想要创建的IP(192.168.122.1):"  vir_ip
     read  -t 120 -p "输入想要创建的机器名称(haha-biz-1234567-test):"  machine_name
     if [ -z "$vir_ip" ] || [  -z "$machine_name" ] # 判断是否输入ip和机器名称
     then
